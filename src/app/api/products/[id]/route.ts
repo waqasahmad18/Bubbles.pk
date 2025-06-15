@@ -2,20 +2,16 @@ import { connectToDatabase } from '@/lib/mongodb'
 import { NextRequest, NextResponse } from 'next/server'
 import { ObjectId } from 'mongodb'
 
-// ✅ Correctly typed context object
-interface Context {
-  params: {
-    id: string
-  }
-}
-
-// ───── GET: Get single product by ID ─────
-export async function GET(req: NextRequest, context: Context) {
-  const { id } = context.params
-
+// ───── GET: Get product by ID ─────
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
     const db = await connectToDatabase()
-    const product = await db.collection('products').findOne({ _id: new ObjectId(id) })
+    const product = await db.collection('products').findOne({
+      _id: new ObjectId(params.id),
+    })
 
     if (!product) {
       return NextResponse.json({ error: 'Product not found' }, { status: 404 })
@@ -29,9 +25,10 @@ export async function GET(req: NextRequest, context: Context) {
 }
 
 // ───── PUT: Update product by ID ─────
-export async function PUT(req: NextRequest, context: Context) {
-  const { id } = context.params
-
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
     const body = await req.json()
     const {
@@ -53,7 +50,7 @@ export async function PUT(req: NextRequest, context: Context) {
     const db = await connectToDatabase()
 
     await db.collection('products').updateOne(
-      { _id: new ObjectId(id) },
+      { _id: new ObjectId(params.id) },
       {
         $set: {
           name,
@@ -77,12 +74,13 @@ export async function PUT(req: NextRequest, context: Context) {
 }
 
 // ───── DELETE: Delete product by ID ─────
-export async function DELETE(req: NextRequest, context: Context) {
-  const { id } = context.params
-
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
   try {
     const db = await connectToDatabase()
-    await db.collection('products').deleteOne({ _id: new ObjectId(id) })
+    await db.collection('products').deleteOne({ _id: new ObjectId(params.id) })
 
     return NextResponse.json({ success: true })
   } catch (error) {
