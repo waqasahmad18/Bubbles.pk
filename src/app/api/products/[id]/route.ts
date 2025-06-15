@@ -3,10 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { ObjectId } from 'mongodb'
 
 // ───── GET: Get product by ID ─────
-export async function GET(
-  req: NextRequest,
-  context: { params: { id: string } }
-) {
+export async function GET(req: NextRequest, context: any) {
   const id = context.params.id
 
   try {
@@ -27,10 +24,7 @@ export async function GET(
 }
 
 // ───── PUT: Update product by ID ─────
-export async function PUT(
-  req: NextRequest,
-  context: { params: { id: string } }
-) {
+export async function PUT(req: NextRequest, context: any) {
   const id = context.params.id
 
   try {
@@ -78,10 +72,7 @@ export async function PUT(
 }
 
 // ───── DELETE: Delete product by ID ─────
-export async function DELETE(
-  req: NextRequest,
-  context: { params: { id: string } }
-) {
+export async function DELETE(req: NextRequest, context: any) {
   const id = context.params.id
 
   try {
