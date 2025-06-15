@@ -2,15 +2,16 @@ import { connectToDatabase } from '@/lib/mongodb'
 import { NextRequest, NextResponse } from 'next/server'
 import { ObjectId } from 'mongodb'
 
-// ───── GET: Get product by ID ─────
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+type RouteParams = { params: { id: string } }
+
+// ───── GET ─────
+export async function GET(req: NextRequest, context: RouteParams) {
+  const { id } = context.params
+
   try {
     const db = await connectToDatabase()
     const product = await db.collection('products').findOne({
-      _id: new ObjectId(params.id),
+      _id: new ObjectId(id),
     })
 
     if (!product) {
@@ -24,11 +25,10 @@ export async function GET(
   }
 }
 
-// ───── PUT: Update product by ID ─────
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+// ───── PUT ─────
+export async function PUT(req: NextRequest, context: RouteParams) {
+  const { id } = context.params
+
   try {
     const body = await req.json()
     const {
@@ -50,7 +50,7 @@ export async function PUT(
     const db = await connectToDatabase()
 
     await db.collection('products').updateOne(
-      { _id: new ObjectId(params.id) },
+      { _id: new ObjectId(id) },
       {
         $set: {
           name,
@@ -73,14 +73,13 @@ export async function PUT(
   }
 }
 
-// ───── DELETE: Delete product by ID ─────
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+// ───── DELETE ─────
+export async function DELETE(req: NextRequest, context: RouteParams) {
+  const { id } = context.params
+
   try {
     const db = await connectToDatabase()
-    await db.collection('products').deleteOne({ _id: new ObjectId(params.id) })
+    await db.collection('products').deleteOne({ _id: new ObjectId(id) })
 
     return NextResponse.json({ success: true })
   } catch (error) {
