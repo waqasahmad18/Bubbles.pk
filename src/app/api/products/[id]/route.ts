@@ -2,11 +2,12 @@ import { connectToDatabase } from '@/lib/mongodb'
 import { NextRequest, NextResponse } from 'next/server'
 import { ObjectId } from 'mongodb'
 
-type RouteParams = { params: { id: string } }
-
-// ───── GET ─────
-export async function GET(req: NextRequest, context: RouteParams) {
-  const { id } = context.params
+// ───── GET: Get product by ID ─────
+export async function GET(
+  req: NextRequest,
+  context: { params: { id: string } }
+) {
+  const id = context.params.id
 
   try {
     const db = await connectToDatabase()
@@ -25,9 +26,12 @@ export async function GET(req: NextRequest, context: RouteParams) {
   }
 }
 
-// ───── PUT ─────
-export async function PUT(req: NextRequest, context: RouteParams) {
-  const { id } = context.params
+// ───── PUT: Update product by ID ─────
+export async function PUT(
+  req: NextRequest,
+  context: { params: { id: string } }
+) {
+  const id = context.params.id
 
   try {
     const body = await req.json()
@@ -73,9 +77,12 @@ export async function PUT(req: NextRequest, context: RouteParams) {
   }
 }
 
-// ───── DELETE ─────
-export async function DELETE(req: NextRequest, context: RouteParams) {
-  const { id } = context.params
+// ───── DELETE: Delete product by ID ─────
+export async function DELETE(
+  req: NextRequest,
+  context: { params: { id: string } }
+) {
+  const id = context.params.id
 
   try {
     const db = await connectToDatabase()
