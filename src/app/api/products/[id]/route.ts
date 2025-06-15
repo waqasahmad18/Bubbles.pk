@@ -1,12 +1,14 @@
 import { connectToDatabase } from '@/lib/mongodb'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { ObjectId } from 'mongodb'
 
 // ───── GET: Get single product by ID ─────
-export async function GET(req: Request, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, context: { params: { id: string } }) {
+  const { id } = context.params
+
   try {
     const db = await connectToDatabase()
-    const product = await db.collection('products').findOne({ _id: new ObjectId(params.id) })
+    const product = await db.collection('products').findOne({ _id: new ObjectId(id) })
 
     if (!product) {
       return NextResponse.json({ error: 'Product not found' }, { status: 404 })
@@ -20,7 +22,9 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 }
 
 // ───── PUT: Update product by ID ─────
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, context: { params: { id: string } }) {
+  const { id } = context.params
+
   try {
     const body = await req.json()
     const {
@@ -30,7 +34,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
       sku,
       category,
       description,
-      images,        // ✅ updated
+      images,
       colors,
       sizes,
     } = body
@@ -42,7 +46,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
     const db = await connectToDatabase()
 
     await db.collection('products').updateOne(
-      { _id: new ObjectId(params.id) },
+      { _id: new ObjectId(id) },
       {
         $set: {
           name,
@@ -51,7 +55,7 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
           sku,
           category,
           description,
-          images,               // ✅ updated
+          images,
           colors: colors || [],
           sizes: sizes || [],
         },
@@ -66,10 +70,12 @@ export async function PUT(req: Request, { params }: { params: { id: string } }) 
 }
 
 // ───── DELETE: Delete product by ID ─────
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
+  const { id } = context.params
+
   try {
     const db = await connectToDatabase()
-    await db.collection('products').deleteOne({ _id: new ObjectId(params.id) })
+    await db.collection('products').deleteOne({ _id: new ObjectId(id) })
 
     return NextResponse.json({ success: true })
   } catch (error) {
