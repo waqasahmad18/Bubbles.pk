@@ -2,9 +2,15 @@ import { connectToDatabase } from '@/lib/mongodb'
 import { NextRequest, NextResponse } from 'next/server'
 import { ObjectId } from 'mongodb'
 
+// Utility to extract the ID from the URL
+function extractIdFromUrl(req: NextRequest): string {
+  const urlParts = req.url.split('/')
+  return urlParts[urlParts.length - 1]
+}
+
 // ───── GET: Get product by ID ─────
-export async function GET(req: NextRequest, context: any) {
-  const id = context.params.id
+export async function GET(req: NextRequest) {
+  const id = extractIdFromUrl(req)
 
   try {
     const db = await connectToDatabase()
@@ -18,14 +24,13 @@ export async function GET(req: NextRequest, context: any) {
 
     return NextResponse.json(product)
   } catch (error) {
-    console.error('❌ Fetch Error:', error)
     return NextResponse.json({ error: 'Failed to fetch product' }, { status: 500 })
   }
 }
 
 // ───── PUT: Update product by ID ─────
-export async function PUT(req: NextRequest, context: any) {
-  const id = context.params.id
+export async function PUT(req: NextRequest) {
+  const id = extractIdFromUrl(req)
 
   try {
     const body = await req.json()
@@ -66,14 +71,13 @@ export async function PUT(req: NextRequest, context: any) {
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('❌ Update Error:', error)
     return NextResponse.json({ error: 'Failed to update product' }, { status: 500 })
   }
 }
 
 // ───── DELETE: Delete product by ID ─────
-export async function DELETE(req: NextRequest, context: any) {
-  const id = context.params.id
+export async function DELETE(req: NextRequest) {
+  const id = extractIdFromUrl(req)
 
   try {
     const db = await connectToDatabase()
@@ -81,7 +85,6 @@ export async function DELETE(req: NextRequest, context: any) {
 
     return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('❌ Delete Error:', error)
     return NextResponse.json(
       { success: false, error: 'Failed to delete product' },
       { status: 500 }
