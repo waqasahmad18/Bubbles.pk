@@ -2,8 +2,15 @@ import { connectToDatabase } from '@/lib/mongodb'
 import { NextRequest, NextResponse } from 'next/server'
 import { ObjectId } from 'mongodb'
 
+// ✅ Correctly typed context object
+interface Context {
+  params: {
+    id: string
+  }
+}
+
 // ───── GET: Get single product by ID ─────
-export async function GET(req: NextRequest, context: { params: { id: string } }) {
+export async function GET(req: NextRequest, context: Context) {
   const { id } = context.params
 
   try {
@@ -15,14 +22,14 @@ export async function GET(req: NextRequest, context: { params: { id: string } })
     }
 
     return NextResponse.json(product)
-  } catch (error: any) {
+  } catch (error) {
     console.error('❌ Fetch Error:', error)
     return NextResponse.json({ error: 'Failed to fetch product' }, { status: 500 })
   }
 }
 
 // ───── PUT: Update product by ID ─────
-export async function PUT(req: NextRequest, context: { params: { id: string } }) {
+export async function PUT(req: NextRequest, context: Context) {
   const { id } = context.params
 
   try {
@@ -63,14 +70,14 @@ export async function PUT(req: NextRequest, context: { params: { id: string } })
     )
 
     return NextResponse.json({ success: true })
-  } catch (error: any) {
+  } catch (error) {
     console.error('❌ Update Error:', error)
     return NextResponse.json({ error: 'Failed to update product' }, { status: 500 })
   }
 }
 
 // ───── DELETE: Delete product by ID ─────
-export async function DELETE(req: NextRequest, context: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, context: Context) {
   const { id } = context.params
 
   try {
