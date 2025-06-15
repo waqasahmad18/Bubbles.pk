@@ -1,3 +1,5 @@
+// This route is dynamic runtime-only; should not be statically analyzed.
+
 import { NextResponse } from 'next/server'
 import { connectToDatabase } from '@/lib/mongodb'
 import jwt from 'jsonwebtoken'
