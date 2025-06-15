@@ -8,7 +8,7 @@ export default function ThankYouPage() {
       <Navbar />
       <div className="max-w-xl mx-auto text-center py-20">
         <h1 className="text-3xl font-bold mb-4">🎉 Thank you for your order!</h1>
-        <p>We've received your order. You’ll get an email when it’s on the way.</p>
+        <p>We've received your order. You will get an email when its on the way.</p>
       </div>
     </>
   )
