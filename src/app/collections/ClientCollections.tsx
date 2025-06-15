@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import Navbar from '@/components/Navbar'
 import Link from 'next/link'
+import Navbar from '@/components/Navbar'
 
-export default function CollectionsPage() {
+export default function ClientCollections() {
   const searchParams = useSearchParams()
   const category = searchParams.get('cat') || 'men'
 
@@ -43,7 +43,6 @@ export default function CollectionsPage() {
                 className="block"
               >
                 <div className="relative bg-white rounded-xl shadow hover:shadow-lg transition overflow-hidden">
-                  {/* Badges */}
                   <div className="absolute top-3 left-3 space-y-1 z-10">
                     <span className="bg-blue-700 text-white text-xs font-semibold px-2 py-1 rounded">
                       New
@@ -55,16 +54,14 @@ export default function CollectionsPage() {
                     )}
                   </div>
 
-                  {/* Image */}
                   <div className="pb-2 pt-4 flex justify-center items-center h-56">
                     <img
-  src={product.images?.[0] || '/placeholder.png'}
-  alt={product.name}
-  className="object-contain h-full w-auto"
-/>
+                      src={product.images?.[0] || '/placeholder.png'}
+                      alt={product.name}
+                      className="object-contain h-full w-auto"
+                    />
                   </div>
 
-                  {/* Dots */}
                   <div className="flex justify-center gap-1 mb-2">
                     {Array(6)
                       .fill(0)
@@ -76,7 +73,6 @@ export default function CollectionsPage() {
                       ))}
                   </div>
 
-                  {/* Name & Price */}
                   <p className="text-center font-medium text-sm text-gray-800 mb-1">{product.name}</p>
                   <div className="text-center text-sm font-semibold mb-4">
                     {product.comparePrice && (
